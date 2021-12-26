@@ -17,56 +17,6 @@ namespace Count_Good_Nodes_in_Binary_Tree
         this.right = right;
       }
     }
-    public class Node
-    {
-      public int val;
-      public int max;
-      public TreeNode left;
-      public TreeNode right;
-      public Node(int val = 0, int max = 0, TreeNode left = null, TreeNode right = null)
-      {
-        this.val = val;
-        this.max = max;
-        this.left = left;
-        this.right = right;
-      }
-    }
-    public int GoodNodes(TreeNode root)
-    {
-      int noOfGoodNodes = 0;
-      if (root == null) return noOfGoodNodes;
-      Queue<Node> q = new Queue<Node>();
-      Node first = new Node(root.val, root.val, root.left, root.right);
-      q.Enqueue(first);
-      noOfGoodNodes++;
-      while (q.Count > 0)
-      {
-        int length = q.Count;
-        while (length-- > 0)
-        {
-          Node node = q.Dequeue();
-          int max = node.max;
-          int val = node.val;
-          TreeNode left = node.left;
-          TreeNode right = node.right;
-          if (left?.val >= val && left?.val >= max) noOfGoodNodes++;
-          if (left != null)
-          {
-            Node newLeft = new Node(left.val, Math.Max(max, left.val), left.left, left.right);
-            q.Enqueue(newLeft);
-          }
-
-          if (right?.val >= val && right?.val >= max) noOfGoodNodes++;
-          if (right != null)
-          {
-            Node newRight = new Node(right.val, Math.Max(max, right.val), right.left, right.right);
-            q.Enqueue(newRight);
-          }
-        }
-      }
-
-      return noOfGoodNodes;
-    }
     public int GoodNodes_Tupple(TreeNode root)
     {
       int noOfGoodNodes = 0;
@@ -108,10 +58,16 @@ namespace Count_Good_Nodes_in_Binary_Tree
     {
       if (root == null) return;
       if (root.val >= max) noOfGoodNodes++;
-      if (root.left != null)
-        Helper(root.left, Math.Max(max, root.left.val));
-      if (root.right != null)
-        Helper(root.right, Math.Max(max, root.right.val));
+        // In exampe 1, from path 3->1->3 we send
+        //     maximum value for comparision.
+        //     Why? Because if we send 1 (i.e. don't
+        //     send max value), we'll count 1 as the 
+        //     start of the path and increment count.
+        //     This is not correct because we are not
+        //     considering the already present maximum
+        //     value (i.e. 3)
+      Helper(root.left, Math.Max(max, root.val));
+      Helper(root.right, Math.Max(max, root.val));
     }
     static void Main(string[] args)
     {
