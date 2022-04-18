@@ -58,14 +58,14 @@ namespace Count_Good_Nodes_in_Binary_Tree
     {
       if (root == null) return;
       if (root.val >= max) noOfGoodNodes++;
-        // In exampe 1, from path 3->1->3 we send
-        //     maximum value for comparision.
-        //     Why? Because if we send 1 (i.e. don't
-        //     send max value), we'll count 1 as the 
-        //     start of the path and increment count.
-        //     This is not correct because we are not
-        //     considering the already present maximum
-        //     value (i.e. 3)
+      // In exampe 1, from path 3->1->3 we send
+      //     maximum value for comparision.
+      //     Why? Because if we send 1 (i.e. don't
+      //     send max value), we'll count 1 as the 
+      //     start of the path and increment count.
+      //     This is not correct because we are not
+      //     considering the already present maximum
+      //     value (i.e. 3)
       Helper(root.left, Math.Max(max, root.val));
       Helper(root.right, Math.Max(max, root.val));
     }
@@ -78,7 +78,23 @@ namespace Count_Good_Nodes_in_Binary_Tree
       root.right.left = new TreeNode(1);
       root.right.right = new TreeNode(5);
       Program p = new Program();
-      Console.WriteLine(p.GoodNodes_using_Recursion(root));
+      Console.WriteLine(p.GoodNodes(root));
+    }
+
+    public int GoodNodes(TreeNode root)
+    {
+      if (root == null) return noOfGoodNodes;
+      GoodNodesHelper(root, root.val);
+      return noOfGoodNodes;
+    }
+
+    private void GoodNodesHelper(TreeNode root, int max)
+    {
+      if (root == null) return;
+      if (root.val >= max) noOfGoodNodes++;
+      max = Math.Max(max, root.val);
+      GoodNodesHelper(root.left, max);
+      GoodNodesHelper(root.right, max);
     }
   }
 }
